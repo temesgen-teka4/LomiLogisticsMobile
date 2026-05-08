@@ -2,20 +2,19 @@
  * LOMI LOGISTICS - GLOBAL TYPE DEFINITIONS
  */
 
-// 1. Driver/User Related Types
+// 1. Define what a Driver looks like
 export type Driver = {
   id: string;
   name: string;
   email: string;
   phone: string;
-  avatar?: string;       // URL to profile picture
+  avatar?: string;
   rating: number;
   totalJobs: number;
-  vehicleType: string;   // e.g., 'Isuzu', 'Sino Truck'
+  vehicleType: string;
   licensePlate: string;
 };
 
-// 2. Task Related Types
 export type TaskStatus = 'Pending' | 'In Progress' | 'Completed';
 
 export type Task = {
@@ -33,11 +32,10 @@ export type Task = {
   completedAt?: string;
 };
 
-// 3. Vehicle Selection Types
 export type VehicleType = 'small' | 'medium' | 'heavy';
 
 /**
- * 4. Navigation Param List
+ * 2. Navigation Param List
  */
 export type RootStackParamList = {
   Login: undefined;
@@ -45,7 +43,8 @@ export type RootStackParamList = {
   Dashboard: { vehicleType: VehicleType };
   Details: { task: Task };
   History: undefined;
-  Profile: undefined; // Add this if you have a profile screen
+  // FIXED: We tell the app that Profile expects a 'driver' object
+  Profile: { driver: Driver }; 
 };
 
 declare global {
