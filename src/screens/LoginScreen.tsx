@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, StatusBar } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, StatusBar, SafeAreaView } from 'react-native';
 import { useLanguage } from '../context/LanguageContext';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../types'; 
@@ -11,40 +11,78 @@ type Props = {
 export default function LoginScreen({ navigation }: Props) {
   const { locale, setLocale, t } = useLanguage();
 
+  const handleLoginPress = () => {
+    navigation.navigate('LoginForm');
+  };
+
+  const handleRegisterPress = () => {
+    navigation.navigate('Register');
+  };
+
+  // Hidden Admin access
+  const handleAdminAccess = () => {
+    navigation.navigate('AdminPanel');
+  };
+
   return (
-    <View style={styles.container}>
-      <StatusBar barStyle="light-content" />
+    <SafeAreaView style={styles.container}>
+      {/* Explicitly setting the bar style for the dark background */}
+      <StatusBar barStyle="light-content" backgroundColor="#0F172A" />
       
-      <Text style={styles.logo}>LOMI</Text>
-      
-      <Text style={styles.subtitle}>Logistics Management Interface</Text>
-      
-      <View style={styles.langRow}>
+      <View style={styles.content}>
+        {/* SECRET ADMIN TRIGGER */}
         <TouchableOpacity 
-          style={[styles.langBtn, locale === 'en' && styles.activeLang]} 
-          onPress={() => setLocale('en')}
+          activeOpacity={1} 
+          onLongPress={handleAdminAccess}
+          delayLongPress={2500} // Slightly longer for better "stealth"
         >
-          <Text style={[styles.langText, { color: locale === 'en' ? '#0F172A' : '#fff' }]}>English</Text>
+          <Text style={styles.logo}>LOMI</Text>
+        </TouchableOpacity>
+        
+        <Text style={styles.subtitle}>Logistics Management Interface</Text>
+        
+        {/* Language Selection Toggle */}
+        <View style={styles.langRow}>
+          <TouchableOpacity 
+            activeOpacity={0.8}
+            style={[styles.langBtn, locale === 'en' && styles.activeLang]} 
+            onPress={() => setLocale('en')}
+          >
+            <Text style={[styles.langText, { color: locale === 'en' ? '#0F172A' : '#fff' }]}>English</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity 
+            activeOpacity={0.8}
+            style={[styles.langBtn, locale === 'am' && styles.activeLang]} 
+            onPress={() => setLocale('am')}
+          >
+            <Text style={[styles.langText, { color: locale === 'am' ? '#0F172A' : '#fff' }]}>አማርኛ</Text>
+          </TouchableOpacity>
+        </View>
+
+        {/* Primary Action Button */}
+        <TouchableOpacity 
+          activeOpacity={0.85}
+          style={styles.loginBtn} 
+          onPress={handleLoginPress} 
+        >
+          <Text style={styles.loginBtnText}>{t('login') || 'LOGIN'}</Text>
         </TouchableOpacity>
 
+        {/* Registration Link */}
         <TouchableOpacity 
-          style={[styles.langBtn, locale === 'am' && styles.activeLang]} 
-          onPress={() => setLocale('am')}
+          activeOpacity={0.6}
+          style={styles.registerLink}
+          onPress={handleRegisterPress}
         >
-          <Text style={[styles.langText, { color: locale === 'am' ? '#0F172A' : '#fff' }]}>አማርኛ</Text>
+          <Text style={styles.registerText}>
+            Don't have an account? <Text style={styles.registerHighlight}>Register</Text>
+          </Text>
         </TouchableOpacity>
+        
+        <Text style={styles.footerText}>Safaricom Ethiopia Network Active 📶</Text>
       </View>
-
-      <TouchableOpacity 
-        style={styles.loginBtn} 
-        // UPDATED: Now points directly to VehicleCapability
-        onPress={() => navigation.navigate('VehicleCapability')} 
-      >
-        <Text style={styles.loginBtnText}>{t('login')}</Text>
-      </TouchableOpacity>
-      
-      <Text style={styles.footerText}>Safaricom Ethiopia Network Active 📶</Text>
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -52,8 +90,12 @@ const styles = StyleSheet.create({
   container: { 
     flex: 1, 
     backgroundColor: '#0F172A', 
+  },
+  content: {
+    flex: 1,
     justifyContent: 'center', 
-    alignItems: 'center' 
+    alignItems: 'center',
+    paddingHorizontal: 20
   },
   logo: { 
     fontSize: 64, 
@@ -63,47 +105,65 @@ const styles = StyleSheet.create({
   },
   subtitle: { 
     color: '#94A3B8', 
-    marginBottom: 40, 
+    marginBottom: 45, 
     fontSize: 12, 
     textTransform: 'uppercase', 
-    letterSpacing: 1 
+    letterSpacing: 1.5 
   },
   langRow: { 
     flexDirection: 'row', 
-    marginBottom: 40, 
+    marginBottom: 45, 
     backgroundColor: '#1E293B', 
     padding: 6, 
-    borderRadius: 12 
+    borderRadius: 14 
   },
   langBtn: { 
     paddingVertical: 10, 
-    paddingHorizontal: 20, 
+    paddingHorizontal: 22, 
     borderRadius: 10 
   },
   langText: { 
-    fontWeight: '600', 
+    fontWeight: '700', 
     fontSize: 14 
   },
   activeLang: { 
-    backgroundColor: '#38BDF8' 
+    backgroundColor: '#38BDF8', // Cyan accent for the selected language
   },
   loginBtn: { 
     backgroundColor: '#10B981', 
-    width: '85%', 
-    padding: 20, 
+    width: '90%', 
+    padding: 22, 
     borderRadius: 18, 
     alignItems: 'center', 
-    elevation: 5 
+    shadowColor: '#10B981',
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.2,
+    shadowRadius: 10,
+    elevation: 8 
   },
   loginBtnText: { 
     color: '#0F172A', 
     fontWeight: '900', 
     fontSize: 18, 
-    letterSpacing: 1 
+    letterSpacing: 1.2 
+  },
+  registerLink: {
+    marginTop: 30,
+    padding: 10,
+  },
+  registerText: {
+    color: '#94A3B8',
+    fontSize: 15,
+  },
+  registerHighlight: {
+    color: '#10B981',
+    fontWeight: 'bold',
   },
   footerText: { 
     color: '#475569', 
     fontSize: 11, 
-    marginTop: 30 
+    position: 'absolute',
+    bottom: 30,
+    fontWeight: '600'
   }
 });

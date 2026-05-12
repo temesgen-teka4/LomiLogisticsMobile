@@ -1,40 +1,39 @@
-// ============================================================
-// LOMI Dispatch — Root Navigation
-// ============================================================
-// Install: @react-navigation/native @react-navigation/native-stack
-// + react-native-screens react-native-safe-area-context
-
 import React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createStackNavigator } from '@react-navigation/stack';
 import { RootStackParamList } from '../types';
 
-import LoginScreen    from '../screens/LoginScreen';
+// Import your screens
+import LoginScreen from '../screens/LoginScreen';
+import RegisterScreen from '../screens/RegisterScreen'; 
 import DashboardScreen from '../screens/DashboardScreen';
-import DetailsScreen  from '../screens/DetailsScreen';
-import ProfileScreen  from '../screens/ProfileScreen';
-import HistoryScreen  from '../screens/HistoryScreen';
-import { Colors } from '../theme/Colors';
+import VehicleCapabilityScreen from '../screens/VehicleCapabilityScreen';
+import DetailsScreen from '../screens/DetailsScreen';
+import HistoryScreen from '../screens/HistoryScreen';
+import ProfileScreen from '../screens/ProfileScreen';
 
-const Stack = createNativeStackNavigator<RootStackParamList>();
+const Stack = createStackNavigator<RootStackParamList>();
 
 export default function AppNavigator() {
   return (
-    <NavigationContainer>
-      <Stack.Navigator
-        initialRouteName="Login"
-        screenOptions={{
-          headerShown: false,
-          contentStyle: { backgroundColor: Colors.bg },
-          animation: 'slide_from_right',
-        }}
-      >
-        <Stack.Screen name="Login"     component={LoginScreen} />
-        <Stack.Screen name="Dashboard" component={DashboardScreen} />
-        <Stack.Screen name="Details"   component={DetailsScreen} />
-        <Stack.Screen name="Profile"   component={ProfileScreen} />
-        <Stack.Screen name="History"   component={HistoryScreen} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <Stack.Navigator 
+      initialRouteName="Login" 
+      screenOptions={{ 
+        headerShown: false,
+        cardStyle: { backgroundColor: '#0F172A' } // Matches your dark theme
+      }}
+    >
+      <Stack.Screen name="Login" component={LoginScreen} />
+      
+      <Stack.Screen 
+        name="Register" 
+        component={RegisterScreen} 
+      />
+      
+      <Stack.Screen name="VehicleCapability" component={VehicleCapabilityScreen} />
+      <Stack.Screen name="Dashboard" component={DashboardScreen} />
+      <Stack.Screen name="Details" component={DetailsScreen} />
+      <Stack.Screen name="History" component={HistoryScreen} />
+      <Stack.Screen name="Profile" component={ProfileScreen} />
+    </Stack.Navigator>
   );
 }
